@@ -549,22 +549,25 @@ wiper_floop(float delta_t, float time2, int counter, void *refcon)
 static int
 draw_rain_effects(XPLMDrawingPhase phase, int before, void *refcon)
 {
-	UNUSED(phase);
-	UNUSED(before);
-	UNUSED(refcon);
+    UNUSED(phase);
+    UNUSED(before);
+    UNUSED(refcon);
 
-	if (!librain_inited)
-		return (1);
+    if (!librain_inited)
+        return (1);
 
-	librain_draw_prepare(B_TRUE);
-	for (int i = 0; i < MAX_Z_DEPTH_OBJS; i++) {
-		if (z_depth_objs[i].obj != NULL)
-			librain_draw_z_depth(z_depth_objs[i].obj, NULL);
-	}
-	librain_draw_exec();
-	librain_draw_finish();
+    librain_draw_prepare_all();
+    for (unsigned i = 0; i < librain_get_call_count(); i++) {
+        librain_draw_prepare_eye(i, B_FALSE);
+        for (int i = 0; i < MAX_Z_DEPTH_OBJS; i++) {
+            if (z_depth_objs[i].obj != NULL)
+                librain_draw_z_depth(z_depth_objs[i].obj, NULL);
+        }
+        librain_draw_exec();
+    }
+    librain_draw_finish_all();
 
-	return (1);
+    return (1);
 }
 
 static void
@@ -687,3 +690,14 @@ XPluginReceiveMessage(XPLMPluginID from, int msg, void *param)
 	UNUSED(msg);
 	UNUSED(param);
 }
+
+#if	IBM
+BOOL WINAPI
+DllMain(HINSTANCE hinst, DWORD reason, LPVOID resvd)
+{
+	UNUSED(hinst);
+	UNUSED(resvd);
+	lacf_glew_dllmain_hook(reason);
+	return (TRUE);
+}
+#endif	/* IBM */

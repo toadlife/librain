@@ -47,7 +47,7 @@ SPIRVX_420_VERSION=420
 SPIRVX_430_VERSION=430
 SPIRVX_450_VERSION=450
 
-GLSLANG=glslang
+GLSLANG=glslangValidator
 SPIRVX=spirv-cross
 GLSL_CLEANUP=./glsl_cleanup.sh
 ECHO=/bin/echo
@@ -65,7 +65,7 @@ endif
 
 define BUILD_SHADER
 	$(call logMsg,-n \	[GLSLANG]\	)
-	$(VERB) $(GLSLANG) $(2) -G460 -o $@ $^
+	$(VERB) $(GLSLANG) $(2) -G -o $@ $^
 
 	$(call logMsg,\	[SPIRVX]\	$@)
 	$(VERB) $(SPIRVX) --version $(SPIRVX_TGT_VERSION) \
@@ -81,7 +81,7 @@ endef
 
 define BUILD_SHADER_MODERN
 	$(call logMsg,-n \	[GLSLANG]\	)
-	$(VERB) $(GLSLANG) $(2) -G460 -o $@ $^
+	$(VERB) $(GLSLANG) $(2) -G -o $@ $^
 
 	$(call logMsg,\	[SPIRVX 4.50]\	$(@:%.$(1).spv=%.$(1).glsl450))
 	$(VERB) $(SPIRVX) --version $(SPIRVX_450_VERSION) \
@@ -90,7 +90,7 @@ endef
 
 define BUILD_COMP_SHADER
 	$(call logMsg,-n \	[GLSLANG]\	)
-	$(VERB) $(GLSLANG) $(2) -G460 -S comp -o $@ $^
+	$(VERB) $(GLSLANG) $(2) -G -S comp -o $@ $^
 
 	$(call logMsg,\	[SPIRVX 4.30]\	$(@:%.$(1).spv=%.$(1).glsl430))
 	$(VERB) $(SPIRVX) --version $(SPIRVX_430_VERSION) \
