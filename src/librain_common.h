@@ -20,13 +20,11 @@
  * CDDL HEADER END
  */
 /*
- * Copyright 2020 Saso Kiselkov. All rights reserved.
+ * Copyright 2018 Saso Kiselkov. All rights reserved.
  */
 
 #ifndef	_LIBRAIN_COMMON_H_
 #define	_LIBRAIN_COMMON_H_
-
-#include "glpriv.h"
 
 #ifdef	__cplusplus
 extern "C" {
@@ -53,13 +51,6 @@ extern "C" {
     #define	LIBRAIN_EXPORT
   #endif	/* !DLLMODE */
 #endif
-
-/*
- * librain internal
- */
-GLint librain_get_current_fbo(void);
-void librain_get_current_vp(GLint vp[4]);
-void librain_reset_clip_control(void);
 
 #ifdef	__cplusplus
 }
