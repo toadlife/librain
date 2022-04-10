@@ -33,8 +33,11 @@ contains(standalone, 1) {
 INCLUDEPATH += $$[LIBACFUTILS]/src
 INCLUDEPATH += $$[LIBACFUTILS]/SDK/CHeaders/XPLM
 INCLUDEPATH += $$[LIBACFUTILS]/SDK/CHeaders/Widgets
-INCLUDEPATH += $$[LIBACFUTILS]/glew
-INCLUDEPATH += $$[LIBACFUTILS]/cglm/cglm-0.4.1/include
+# Glew for Windows x64 (must use mingw version if building on linux!)
+INCLUDEPATH += $$[LIBACFUTILS]/libacfutils-redist/mingw64/include/
+#INCLUDEPATH += $$[LIBACFUTILS]/glew/mingw64/include/
+INCLUDEPATH += $$[LIBACFUTILS]/cglm/cglm-0.7.9/include
+INCLUDEPATH += $$[LIBACFUTILS]/soil/include
 QMAKE_CFLAGS += -std=c99 -O2 -g -W -Wall -Wextra -Werror -fvisibility=hidden
 QMAKE_CFLAGS += -Wunused-result -Wno-missing-field-initializers
 
@@ -52,7 +55,7 @@ DEFINES += _GNU_SOURCE DEBUG _FILE_OFFSET_BITS=64
 DEFINES += GL_GLEXT_PROTOTYPES
 
 # Latest X-Plane APIs. No legacy support needed.
-DEFINES += XPLM200 XPLM210 XPLM300 XPLM301 XPLM302 XPLM_DEPRECATED
+DEFINES += XPLM200 XPLM210 XPLM303 XPLM_DEPRECATED
 
 TARGET = rain
 
@@ -72,6 +75,8 @@ win32:contains(CROSS_COMPILE, x86_64-w64-mingw32-) {
 	LIBS += $$system("$$[LIBACFUTILS]/pkg-config-deps win-64 \
 	    --static-openal --libs")
 	LIBS += -L$$[LIBACFUTILS]/SDK/Libraries/Win -lXPLM_64
+#SOIL does not come with libafcutils - you must download it youself. Download the mingw version if
+        #LIBS += -L$$[LIBACFUTILS]/soil/lib -lSOIL
 	LIBS += -L$$[LIBACFUTILS]/GL_for_Windows/lib -lglu32 -lopengl32
 	LIBS += -ldbghelp
 	LIBS += -Wl,--output-def,rain.def
@@ -85,6 +90,8 @@ linux-g++-64 {
 	QMAKE_CFLAGS += $$system("$$[LIBACFUTILS]/pkg-config-deps linux-64 \
 	    --static-openal --cflags")
 	LIBS += -L$$[LIBACFUTILS]/qmake/lin64 -lacfutils
+	LIBS += $$system("$$[LIBACFUTILS]/pkg-config-deps linux-64 \
+	    --static-openal --libs")
 }
 
 macx {

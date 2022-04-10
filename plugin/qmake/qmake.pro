@@ -41,7 +41,7 @@ DEFINES += GL_GLEXT_PROTOTYPES
 DEFINES += PLUGIN_VERSION=\'\"$$system("git describe --abbrev=0 --tags")\"\'
 
 # Latest X-Plane APIs. Legacy support needed.
-DEFINES += XPLM200 XPLM210 XPLM300 XPLM301 XPLM302 XPLM_DEPRECATED
+DEFINES += XPLM200 XPLM210 XPLM303 XPLM_DEPRECATED
 
 TARGET = rain
 
@@ -62,7 +62,7 @@ win32:contains(CROSS_COMPILE, x86_64-w64-mingw32-) {
 	    --static-openal --libs")
 	LIBS += -L$$[LIBACFUTILS]/SDK/Libraries/Win -lXPLM_64
 #SOIL does not come with libafcutils - you must download it youself. Download the mingw version if
-        LIBS += -L$$[LIBACFUTILS]/soil/lib -lSOIL
+        #LIBS += -L$$[LIBACFUTILS]/soil/lib -lSOIL
 	LIBS += -L$$[LIBACFUTILS]/GL_for_Windows/lib -lglu32 -lopengl32
 	LIBS += -ldbghelp
 }
