@@ -878,6 +878,9 @@ obj8_draw_group_cmd(const obj8_t *obj, obj8_cmd_t *cmd, const char *groupname,
 	mat4 pvm;
 
 	UNUSED(obj);
+	/* Fix (Kludge): When the airframe fails, librain will take down X-plane
+	if we don't bail out here */
+        if (cmd->type != OBJ8_CMD_GROUP) return;
 	ASSERT3U(cmd->type, ==, OBJ8_CMD_GROUP);
 	memcpy(pvm, pvm_in, sizeof (pvm));
 
@@ -985,7 +988,9 @@ obj8_draw_group(obj8_t *obj, const char *groupname, GLuint prog,
     const mat4 pvm_in)
 {
 	mat4 pvm;
-
+	/* Fix (Kludge): When the airframe fails, librain will take down X-plane
+	if we don't bail out here */
+    	if (prog == 0) return;
 	ASSERT(prog != 0);
 
 	glutils_reset_errors();
@@ -1002,6 +1007,7 @@ obj8_draw_group(obj8_t *obj, const char *groupname, GLuint prog,
 	setup_arrays(obj, prog);
 
 	glm_mat4_mul((vec4 *)pvm_in, obj->matrix, pvm);
+
 	obj8_draw_group_cmd(obj, obj->top, groupname, pvm);
 
 	gl_state_cleanup();
